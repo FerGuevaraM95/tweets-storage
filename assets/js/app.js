@@ -32,12 +32,37 @@ function agregarTweet(e) {
     li.appendChild(deleteButton);
     // Añade el tweet a la lista
     listTweets.appendChild(li);
+
+    // Añadir a Local Storage
+    addTweetLocalStorage(tweet);
 }
 
+// Eliminar tweet del DOM
 function deleteTweet(e) {
     e.preventDefault();
     if(e.target.className === 'delete-tweet') {
         console.log(e.target.parentElement.remove());
         alert('Tweet Eliminado');
     }
+}
+
+// Agregar tweet a Local Storage
+function addTweetLocalStorage(tweet) {
+    let tweets;
+    tweets = getTweetsLocalStorage();
+    // Añadir el nuevo tweet
+    tweets.push(tweet);
+    // Convertir de string a array para local storage
+    localStorage.setItem('tweets', JSON.stringify(tweets));
+}
+
+// Obtener tweets de Local Storage
+function getTweetsLocalStorage() {
+    let tweets;
+    if(localStorage.getItem('tweets') === null) {
+        tweets = [];
+    } else {
+        tweets.JSON.pase(localStorage.getItem('tweets'));
+    }
+    return tweets;
 }
