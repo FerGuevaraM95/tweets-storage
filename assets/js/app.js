@@ -1,6 +1,6 @@
 // VARIABLES
-const listaTweets = document.querySelector('#lista-tweets');
-const formulario = document.querySelector('#formulario');
+const listTweets = document.querySelector('#list-tweets');
+const form = document.querySelector('#form');
 
 
 
@@ -9,7 +9,9 @@ eventListeners();
 
 function eventListeners() {
     // Cuando se envia el formulario
-    formulario.addEventListener('submit', agregarTweet);
+    form.addEventListener('submit', agregarTweet);
+    // Borrar Tweets
+    listTweets.addEventListener('click', deleteTweet);
 }
 
 
@@ -19,17 +21,23 @@ function agregarTweet(e) {
     e.preventDefault();
     // Leer el valor del textarea
     const tweet = document.querySelector('#tweet').value;
+    // Crear el elemento y agregar el contenido a la lista
+    const li = document.createElement('li');
+    li.innerText = tweet;
     // Crear botón de eliminar
     const deleteButton = document.createElement('a');
     deleteButton.classList = 'delete-tweet';
     deleteButton.innerText = 'X'
-    // Crear el elemento y agregar el contenido a la lista
-    const li = document.createElement('li');
-    li.innerText = tweet;
     // Añade el botón de borrar al tweet
     li.appendChild(deleteButton);
     // Añade el tweet a la lista
-    listaTweets.appendChild(li);
+    listTweets.appendChild(li);
+}
 
-    console.log(tweet);
+function deleteTweet(e) {
+    e.preventDefault();
+    if(e.target.className === 'delete-tweet') {
+        console.log(e.target.parentElement.remove());
+        alert('Tweet Eliminado');
+    }
 }
