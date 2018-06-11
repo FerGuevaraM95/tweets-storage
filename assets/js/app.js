@@ -12,6 +12,8 @@ function eventListeners() {
     form.addEventListener('submit', agregarTweet);
     // Borrar Tweets
     listTweets.addEventListener('click', deleteTweet);
+    // Contenido cargado
+    document.addEventListener('DOMContentLoaded', localStorageReady);
 }
 
 
@@ -41,9 +43,29 @@ function agregarTweet(e) {
 function deleteTweet(e) {
     e.preventDefault();
     if(e.target.className === 'delete-tweet') {
-        console.log(e.target.parentElement.remove());
-        alert('Tweet Eliminado');
+        e.target.parentElement.remove();
+        deleteTweetLocalStorage(e.target.parentElement.innerText);
     }
+}
+
+// Mostrar datos de Local Storage en la Lista
+function localStorageReady() {
+    let tweets;
+    tweets = getTweetsLocalStorage();
+
+    tweets.forEach(function(tweet) {
+        // Crear el elemento y agregar el contenido a la lista
+        const li = document.createElement('li');
+        li.innerText = tweet;
+        // Crear botón de eliminar
+        const deleteButton = document.createElement('a');
+        deleteButton.classList = 'delete-tweet';
+        deleteButton.innerText = 'X'
+        // Añade el botón de borrar al tweet
+        li.appendChild(deleteButton);
+        // Añade el tweet a la lista
+        listTweets.appendChild(li);
+    });
 }
 
 // Agregar tweet a Local Storage
@@ -52,17 +74,34 @@ function addTweetLocalStorage(tweet) {
     tweets = getTweetsLocalStorage();
     // Añadir el nuevo tweet
     tweets.push(tweet);
-    // Convertir de string a array para local storage
+    // Convertir de string a arreglo para local storage
     localStorage.setItem('tweets', JSON.stringify(tweets));
 }
 
-// Obtener tweets de Local Storage
+// Comprobar que haya elementos en localstorage, retorna un arreglo
 function getTweetsLocalStorage() {
     let tweets;
-    if(localStorage.getItem('tweets') === null) {
+    // Revisamos los valoes de local storage
+    if (localStorage.getItem('tweets') === null) {
         tweets = [];
     } else {
-        tweets.JSON.pase(localStorage.getItem('tweets'));
+        tweets = JSON.parse(localStorage.getItem('tweets'));
     }
     return tweets;
+}
+
+// Eliminar tweet de Local Storage
+function deleteTweetLocalStorage(tweet) {
+    let tweets, tweetDelete;
+    // Eliminar la X del tweet
+    tweetDelete = tweet.substring(0, tweet.length -1);
+
+    tweets = getTweetsLocalStorage();
+
+    tweets.forEach(function(tweet, index) {
+        if(tweetDelete === tweet) {
+            tweets.splice(index, 1);
+        }
+    });
+    localStorage.setItem('tweets', JSON.stringify(tweets));
 }
