@@ -9,7 +9,7 @@ eventListeners();
 
 function eventListeners() {
     // Cuando se envia el formulario
-    form.addEventListener('submit', agregarTweet);
+    form.addEventListener('submit', addTweet);
     // Borrar Tweets
     listTweets.addEventListener('click', deleteTweet);
     // Contenido cargado
@@ -19,7 +19,7 @@ function eventListeners() {
 
 // FUNCIONES
 // Añadir tweet del formulario
-function agregarTweet(e) {
+function addTweet(e) {
     e.preventDefault();
     // Leer el valor del textarea
     const tweet = document.querySelector('#tweet').value;
